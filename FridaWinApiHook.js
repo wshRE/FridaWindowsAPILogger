@@ -218,17 +218,14 @@ function hookGetTickCount() {
 //获取程序基地址
 // 打印被调试程序主模块的基地址  
 function printMainModuleBaseAddress() {  
-    const modules = Process.enumerateModules();  
-    for (let i = 0; i < modules.length; i++) {  
-        const module = modules[i]; 
-        if (module.name.indexOf('1.exe') !== -1) {  
-            writeLogTitle(`[+] 被调试程序 '${module.name}' 基地址: 0x${module.base.toString(16)}`);
-            console.log();     
-            return;  
-        }  
+    const mainModule = Process.mainModule; // 获取主模块  
+    // 打印主模块的名称和基地址  
+    if (mainModule) {  
+        writeLogTitle(`[+] 被调试程序 '${mainModule.name}' 基地址: 0x${mainModule.base.toString(16)}`);  
+    } else {  
+        writeLogFail(`[-] 未找到被调试程序的主模块`);  
     }  
-    writeLogFail(`[-] 未找到被调试程序的基地址`);    
-}  
+}    
 
 //---------------------根据指定规则hook指定函数 --------------------------------
 function hookGenericFunction(moduleName, functionName) {
